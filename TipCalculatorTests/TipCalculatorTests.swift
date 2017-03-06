@@ -2,8 +2,8 @@
 //  TipCalculatorTests.swift
 //  TipCalculatorTests
 //
-//  Created by Home on 3/5/17.
-//  Copyright © 2017 Home. All rights reserved.
+//  Created by Rohit on 3/5/17.
+//  Copyright © 2017 Rohit. All rights reserved.
 //
 
 import XCTest
