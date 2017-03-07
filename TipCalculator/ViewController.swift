@@ -23,6 +23,12 @@ class ViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         billValue.becomeFirstResponder()
+        
+        let tipValues = TipCalculatorCore.getTipPercentages()
+        for tipValue in tipValues {
+            tipControl.setTitle(tipValue, forSegmentAt: tipValues.index(of: tipValue)!)
+        }
+        configureValues()
     }
 
     override func didReceiveMemoryWarning() {
@@ -43,16 +49,8 @@ class ViewController: UIViewController {
     
     private func configureValues() {
         var billAmount: Double = 0
-        var tipPercentage: Double = 0
-        
-        switch tipControl.selectedSegmentIndex {
-        case 1:
-            tipPercentage = 0.2
-        case 2:
-            tipPercentage = 0.25
-        default:
-            tipPercentage = 0.18
-        }
+        let tipValues = TipCalculatorCore.getTipPercentages()
+        let tipPercentage = (Double(tipValues[tipControl.selectedSegmentIndex])!)/100
         
         if let amount = billValue.text, let amountInDouble = Double(amount) {
            billAmount = amountInDouble
