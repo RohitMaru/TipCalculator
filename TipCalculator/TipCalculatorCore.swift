@@ -16,6 +16,7 @@ class TipCalculatorCore: NSObject {
     private static let billKey = "bill"
     private static let billDateKey = "billDate"
     private static let billResetTimeKey = "billResetTime"
+    private static let themeKey = "theme"
 
     static func getTipPercentages() -> [String] {
         
@@ -43,6 +44,10 @@ class TipCalculatorCore: NSObject {
         defaults.set(billResetTime, forKey: billResetTimeKey)
     }
 
+    static func insert(theme: String) {
+        defaults.set(theme, forKey: themeKey)
+    }
+    
     static func resetBill() {
         defaults.removeObject(forKey: billKey)
         defaults.removeObject(forKey: billDateKey)
@@ -58,5 +63,15 @@ class TipCalculatorCore: NSObject {
     
     static func getBillResetTime() -> String? {
         return defaults.value(forKey: billResetTimeKey) as? String
+    }
+    
+    static func getCurrentTheme() -> String? {
+        if let theme = defaults.value(forKey: themeKey) as? String {
+            return theme
+        } else {
+            defaults.set("white", forKey: themeKey)
+            defaults.synchronize()
+            return "white"
+        }
     }
 }

@@ -35,9 +35,9 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         //check for bill date
-        if let billDate = TipCalculatorCore.getBillInsertDate() {
+        if let billDate = TipCalculatorCore.getBillInsertDate(), let billResetTime = TipCalculatorCore.getBillResetTime(), let doubleTime = Double(billResetTime) {
             let interval = Date().timeIntervalSince(billDate)
-            if interval > 10*60 {
+            if interval > doubleTime*60 {
                 TipCalculatorCore.resetBill()
             }
         }

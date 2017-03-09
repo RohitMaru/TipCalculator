@@ -30,15 +30,12 @@ class SettingsViewController: UIViewController {
         let saveBtn = UIBarButtonItem(barButtonSystemItem: .save, target: self, action: #selector(saveBtnClicked))
         navigationItem.setRightBarButton(saveBtn, animated: true)
 
-        //Change currency
-        
-        //Check for Theme
-        if defaults.string(forKey: themeKey) == nil {
-            defaults.set("default", forKey: themeKey)
-            defaults.synchronize()
-        }
-        
         configureUIElements()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        setTheme()
     }
     
     private func configureUIElements() {
@@ -103,6 +100,19 @@ class SettingsViewController: UIViewController {
         present(alert, animated: true, completion: nil)
     }
     
+    @IBAction func selectThemeAction(_ sender: Any) {
+        let themesList = TCTheme.allThemes
+        let actionSheet = UIAlertController(title: "Tip Calculator", message: "Choose a Theme", preferredStyle: .actionSheet)
+        for themeString in themesList {
+            actionSheet.addAction(UIAlertAction(title: themeString, style: .default, handler: { [weak self] (action) in
+                if let title = action.title {
+                    TipCalculatorCore.insert(theme: title)
+                    self?.setTheme()
+                }
+            }))
+        }
+        present(actionSheet, animated: true, completion: nil)
+    }
 }
 
 extension SettingsViewController: UITextFieldDelegate {
