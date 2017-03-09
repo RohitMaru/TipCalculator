@@ -34,7 +34,13 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
-        // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        //check for bill date
+        if let billDate = TipCalculatorCore.getBillInsertDate() {
+            let interval = Date().timeIntervalSince(billDate)
+            if interval > 10*60 {
+                TipCalculatorCore.resetBill()
+            }
+        }
     }
 
     func applicationWillTerminate(_ application: UIApplication) {

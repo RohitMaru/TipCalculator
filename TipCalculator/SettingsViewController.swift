@@ -18,6 +18,7 @@ class SettingsViewController: UIViewController {
     @IBOutlet weak var tipOne: UITextField!
     @IBOutlet weak var tipTwo: UITextField!
     @IBOutlet weak var tipThree: UITextField!
+    @IBOutlet weak var billResetTime: UITextField!
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -37,14 +38,23 @@ class SettingsViewController: UIViewController {
             defaults.synchronize()
         }
         
-        configureUIElements(values: TipCalculatorCore.getTipPercentages())
+        configureUIElements()
     }
     
-    private func configureUIElements(values: [String]) {
+    private func configureUIElements() {
+        let values = TipCalculatorCore.getTipPercentages()
         if values.count == 3 {
             tipOne.text = values.first
             tipTwo.text = values[1]
             tipThree.text = values.last
+        }
+        
+        if let billResetValue = TipCalculatorCore.getBillResetTime() {
+            billResetTime.text = billResetValue
+        } else {
+            //Insert default value of 10min
+            TipCalculatorCore.insert(billResetTime: "10")
+            billResetTime.text = "10"
         }
     }
     
@@ -64,11 +74,22 @@ class SettingsViewController: UIViewController {
             newTips.append(tipValueText)
         }
 
-        if newTips.count == 3 {
+        var billResetHasValue = false
+        
+        if let billResetValue = billResetTime.text, let billResetValueDouble = Double(billResetValue), billResetValueDouble >= 0 {
+            TipCalculatorCore.insert(billResetTime: billResetValue)
+            billResetHasValue = true
+        }
+        
+        if newTips.count == 3 && billResetHasValue {
             TipCalculatorCore.insert(tips: newTips)
             presentAlertView(message: "Saved successfully")
         } else {
-            presentAlertView(message: "Tip percentages cannot be less than 0 and greater than 100")
+            if !billResetHasValue {
+                presentAlertView(message: "Enter a valid bill reset time")
+            } else {
+                presentAlertView(message: "Tip percentages cannot be less than 0 and greater than 100")
+            }
         }
         
     }

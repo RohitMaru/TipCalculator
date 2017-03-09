@@ -18,6 +18,10 @@ class ViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         billValue.delegate = self
+        //Set Bill Value based off of user defaults
+        if let billValueAmount = TipCalculatorCore.getBillAmount() {
+            billValue.text = billValueAmount
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -37,6 +41,10 @@ class ViewController: UIViewController {
 
     @IBAction func tapGestureAction(_ sender: UITapGestureRecognizer) {
         view.endEditing(true)
+        //Save bill amount to defaults
+        if let billAmount = billValue.text {
+            TipCalculatorCore.insert(bill: billAmount)
+        }
     }
 
     @IBAction func calculateTip(_ sender: UITextField) {
