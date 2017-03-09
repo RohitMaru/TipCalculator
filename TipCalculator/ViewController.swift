@@ -66,11 +66,22 @@ class ViewController: UIViewController {
         
         let tipAmount = billAmount * tipPercentage
         
-        tipValue.text = "$\(tipAmount)"
-        totalValue.text = "$\(billAmount + tipAmount)"
+        if let formattedBill = modifyCurrencyBasedOnLocale(amount: NSNumber(value: tipAmount)) {
+            tipValue.text = formattedBill
+        }
+        
+        if let formattedBill = modifyCurrencyBasedOnLocale(amount: NSNumber(value: (billAmount + tipAmount))) {
+            totalValue.text = formattedBill
+        }
+        
     }
     
-    
+    private func modifyCurrencyBasedOnLocale(amount: NSNumber) -> String? {
+        let formatter = NumberFormatter()
+        formatter.numberStyle = .currency
+        formatter.locale = Locale.current
+        return formatter.string(from: amount)
+    }
 }
 
 extension ViewController: UITextFieldDelegate {
